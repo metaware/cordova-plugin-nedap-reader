@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<plugin xmlns="http://www.phonegap.com/ns/plugins/1.0" id="cordova-plugin-nedap-reader" version="0.0.1">
+
+  <name>Nedap RFID Reader</name>
+
+  <engines>
+    <engine name="cordova-ios" version=">=3.4.0" />
+  </engines>
+
+  <asset src="www/nedap-reader.js" target="js/nedap-reader.js"/>
+
+<!--   <js-module src="www/nedap-reader.js" name="NedapReader">
+    <clobbers target="NedapReader" />
+  </js-module> -->
+
+  <platform name="ios">
+
+    <!-- <hook type="after_platform_add" src="hooks/iosrtc-swift-support.js" /> -->
+    
+    <info>
+      1. In your project's config.xml, ensure you have: &lt;preference name=&quot;deployment-target&quot; value=&quot;8.0&quot; /&gt;<!-- <preference name="deployment-target" value="7.0" \> -->
+      2. Add `[Project Name]/Plugins/cordova-plugin-nedap-reader/Bridging-Header.h` to Objective-c Bridging Header under the Swift Compiler - Code Generation options (available in Build Settings)
+      3. Set "Embedded Content Contains Swift Code" to "Yes" under Build Settings
+      4. Set "Runpath Search Paths" to `@executable_path/Frameworks` under Build Settings.
+    </info>
+    
+    <config-file target="config.xml" parent="/*">
+      <feature name="NedapReader">
+        <param name="ios-package" value="NedapReader" />
+      </feature>
+    </config-file>
+
+    <js-module src="www/nedap-reader.js" name="NedapReader">
+      <clobbers target="window.NedapReader" />
+    </js-module>
+
+    <header-file src="src/ios/Bridging-Header.h" />
+
+    <source-file src="src/ios/Logic/IDHand/IdHand.swift" />
+    <source-file src="src/ios/Logic/IDHand/IdHandConnector.swift" />
+    <source-file src="src/ios/Logic/IDHand/IdHandFirmware.swift" />
+    <source-file src="src/ios/Logic/IDHand/IdHandSettings.swift" />
+
+    <source-file src="src/ios/Logic/Sessions/BarcodeSession.swift" />
+    <source-file src="src/ios/Logic/Sessions/InventorySession.swift" />
+    <source-file src="src/ios/Logic/Sessions/ObservationCounter.swift" />
+    <source-file src="src/ios/Logic/Sessions/ObservedBarcode.swift" />
+    <source-file src="src/ios/Logic/Sessions/ProgramSession.swift" />
+
+    <source-file src="src/ios/Logic/Actions/Action.swift" />
+    <source-file src="src/ios/Logic/Actions/BarcodeAction.swift" />
+    <source-file src="src/ios/Logic/Actions/InventoryAction.swift" />
+    <source-file src="src/ios/Logic/Actions/ProgramAction.swift" />
+
+    <source-file src="src/ios/Logic/Utilities/CountryCodeToRegulationMapper.swift" />
+
+    <source-file src="src/ios/Logic/EpcObservation.swift" />
+
+    <source-file src="src/ios/NedapReader.swift"/>
+
+    <framework src="src/ios/Frameworks/NedapIdReader.framework" custom="true" />
+
+  </platform>
+
+</plugin>

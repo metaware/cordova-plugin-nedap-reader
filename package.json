@@ -1,0 +1,10 @@
+{
+  "name": "cordova-plugin-nedap-reader",
+  "version": "0.0.1",
+  "scripts": {
+    "build": "babel www/es6 -d www"
+  }
+  "devDependencies": {
+    "babel-cli": "^6.0.0"
+  }
+}

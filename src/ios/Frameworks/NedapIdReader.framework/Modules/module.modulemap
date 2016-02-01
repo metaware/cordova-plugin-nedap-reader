@@ -1,0 +1,6 @@
+framework module NedapIdReader {
+  umbrella header "NedapIdReader.h"
+
+  export *
+  module * { export * }
+}
