@@ -163,3 +163,13 @@ reader.on('barcodeIdHandDidRead', function(result) {
   // }
 })
 ```
+
+#### 5. `barcodeIdHandReadFailed`
+
+Example: 
+
+```
+reader.on('barcodeIdHandReadFailed', function() {
+  // do something interesting
+})
+```

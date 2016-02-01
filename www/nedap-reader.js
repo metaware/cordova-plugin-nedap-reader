@@ -24,6 +24,7 @@ var NedapReader = (function () {
       'barcodeIdHandDidStartReading': [],
       'barcodeIdHandDidStopReading': [],
       'barcodeIdHandDidRead': [],
+      'barcodeIdHandReadFailed': [],
       'onDisconnect': []
     };
   }

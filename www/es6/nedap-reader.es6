@@ -17,6 +17,7 @@ class NedapReader {
       'barcodeIdHandDidStartReading': [],
       'barcodeIdHandDidStopReading':  [],
       'barcodeIdHandDidRead':         [],
+      'barcodeIdHandReadFailed':      [],
       'onDisconnect':                 []
     }
   }

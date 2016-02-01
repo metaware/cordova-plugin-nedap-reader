@@ -22,6 +22,7 @@
       2. Add `[Project Name]/Plugins/cordova-plugin-nedap-reader/Bridging-Header.h` to Objective-c Bridging Header under the Swift Compiler - Code Generation options (available in Build Settings)
       3. Set "Embedded Content Contains Swift Code" to "Yes" under Build Settings
       4. Set "Runpath Search Paths" to `@executable_path/Frameworks` under Build Settings.
+      5. In your Info.plist, ensure that you have an entry added to : `Supported external accessory protocols` which is set to `com.nedap.retail.idreader`
     </info>
     
     <config-file target="config.xml" parent="/*">

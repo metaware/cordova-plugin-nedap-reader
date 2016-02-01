@@ -66,7 +66,7 @@ import NedapIdReader
     for epcObservation in inventorySession!.epcObservations() {
       epcObservationsArray.append([
         "hex": epcObservation.hex,
-        "rssi": NSNumber.init(short: epcObservation.rssi) as Int,
+        "rssi": NSNumber.init(short: epcObservation.rssi/10) as Int,
         "times_observed": epcObservation.count
         ] as [String: AnyObject!])
     }
@@ -214,6 +214,10 @@ import NedapIdReader
   
   func barcodeIdHandReadFailed(errorMessage: String) {
     print("barcodeIdHandReadFailed")
+    let response = ["eventName": "barcodeIdHandReadFailed", "payload": false]
+    let pluginResult = CDVPluginResult.init(status: CDVCommandStatus_OK, messageAsDictionary: response)
+    pluginResult.setKeepCallbackAsBool(true)
+    self.commandDelegate!.sendPluginResult(pluginResult, callbackId: self.barcodeSessionCallbackId)
   }
   
   
