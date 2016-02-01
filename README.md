@@ -16,6 +16,14 @@ NedapReader.connect()
   })
 ```
 
+`NedapReader.connect()` also accepts as an object where you can pass in the following and configure:
+
+```
+{
+  session: "Session1", // possible values: "Session0", "Session1", "Session2", "Session3"
+  disableFeedback: true, // possible values: true/false. Enables or disables Device feedback: Sounds & Vibration altogether.
+}
+```
 
 #### 1. `reader.startObservingEpcs()`
 

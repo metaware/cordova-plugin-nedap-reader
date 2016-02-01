@@ -136,7 +136,7 @@ class NedapReader {
     }, "NedapReader", "writeToTag", [value]) 
   }
 
-  static connect() {
+  static connect(settings) {
     console.info('NedapReader: Initiating connection with !D Hand')
     return new Promise((resolve, reject) => {
       cordova.exec((idHand) => { 
@@ -196,7 +196,7 @@ class NedapReader {
         resolve(reader) 
       }, (error) => {
         reject(error)
-      }, "NedapReader", "connect", []);
+      }, "NedapReader", "connect", [settings]);
     })
   }
 

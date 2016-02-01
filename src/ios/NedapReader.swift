@@ -26,12 +26,30 @@ import NedapIdReader
   var connectedIdHand:            IdHand!
   var observationTimer:           NSTimer?
   
+  var disableFeedback:            Bool!
+  
+  func configureSettings(object: AnyObject) -> Void {
+    switch object["session"] as! String  {
+      case "Session0":
+        idHandSettings?.session = IdHandRFIDSessionType.Session0
+      case "Session1":
+        idHandSettings?.session = IdHandRFIDSessionType.Session1
+      case "Session2":
+        idHandSettings?.session = IdHandRFIDSessionType.Session2
+      case "Session3":
+        idHandSettings?.session = IdHandRFIDSessionType.Session3
+      default:
+        idHandSettings?.session = IdHandRFIDSessionType.Session1
+    }
+    self.disableFeedback = object["disableFeedback"] as! Bool
+  }
+  
   func connect(command: CDVInvokedUrlCommand) -> Void {
     self.callbackId = command.callbackId
-    print("Called connect()")
-    self.idHandSettings = IdHandSettings()
-    self.idHandConnector = IdHandConnector(idHandSettings: idHandSettings!)
-    self.idHandConnector!.addObserver(self)
+    idHandSettings = IdHandSettings()
+    configureSettings(command.arguments.first!)
+    idHandConnector = IdHandConnector(idHandSettings: idHandSettings!)
+    idHandConnector!.addObserver(self)
   }
   
   func disconnect(command: CDVInvokedUrlCommand) -> Void {
@@ -64,7 +82,6 @@ import NedapIdReader
   }
   
   func currentObservations() -> Void {
-    print("checking current observations")
     var epcObservationsArray = [AnyObject]()
     for epcObservation in inventorySession!.epcObservations() {
       epcObservationsArray.append([
@@ -91,8 +108,9 @@ import NedapIdReader
   // MARK: IdHandConnectorObserver
   
   func idHandDidConnect(idHand: IdHand) {
-    print("idHandDidConnect [from cordova]")
+    print("idHandDidConnect")
     self.connectedIdHand = idHand
+    self.connectedIdHand.disableFeedback = disableFeedback
     
     let pluginResult = CDVPluginResult.init(status: CDVCommandStatus_OK, messageAsDictionary: connectedIdHand.toDict() as! [NSObject: AnyObject!])
     self.commandDelegate?.sendPluginResult(pluginResult, callbackId: self.callbackId)

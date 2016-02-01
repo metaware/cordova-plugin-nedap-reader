@@ -96,6 +96,8 @@ class IdHand : NSObject, IDRDeviceListener {
     /// Array of supported regulations for this !D Hand
     var supportedRegulations : [IDRRegulationWrapper]?
 
+    var disableFeedback: Bool?
+
     /// Minimum and maximum output power as retrieved from the !D Hand
     private(set) var outputPowerBoundaries : IdHandOutputPower?
 
@@ -464,6 +466,9 @@ class IdHand : NSObject, IDRDeviceListener {
 
     /// Provides !D Hand user feedback
     func feedback(feedbackType: IdHandFeedback) {
+        if disableFeedback == true {
+            return
+        }
         switch feedbackType {
         case .Notify:
             device.send(IDRUserFeedbackPacket(vibration: IDRVibrationPattern.WeakSingle, speaker: IDRSpeakerSound.Notify))

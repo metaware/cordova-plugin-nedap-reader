@@ -167,7 +167,7 @@ var NedapReader = (function () {
     }
   }], [{
     key: 'connect',
-    value: function connect() {
+    value: function connect(settings) {
       console.info('NedapReader: Initiating connection with !D Hand');
       return new Promise(function (resolve, reject) {
         cordova.exec(function (idHand) {
@@ -227,7 +227,7 @@ var NedapReader = (function () {
           resolve(reader);
         }, function (error) {
           reject(error);
-        }, 'NedapReader', 'connect', []);
+        }, 'NedapReader', 'connect', [settings]);
       });
     }
   }]);
