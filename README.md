@@ -16,7 +16,7 @@ NedapReader.connect()
   })
 ```
 
-`NedapReader.connect()` also accepts as an object where you can pass in the following and configure:
+`NedapReader.connect()` also accepts an object where you can pass in the following and configure:
 
 ```
 {
