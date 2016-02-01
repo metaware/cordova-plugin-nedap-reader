@@ -42,7 +42,25 @@ Closes barcode observation session.
 
 ---
 
-#### 5. `reader.disconnect()`
+#### 5. `reader.startProgrammingSession()`
+
+Start the tag writing/programming session.
+
+---
+
+#### 6. `reader.stopProgrammingSession()`
+
+Closes the tag writing/programming session.
+
+---
+
+#### 7. `reader.writeToTag(value)`
+
+Prepares the value that needs to be written to the Tag.
+
+---
+
+#### 8. `reader.disconnect()`
 
 Disconnects the reader. 
 
@@ -171,5 +189,45 @@ Example:
 ```
 reader.on('barcodeIdHandReadFailed', function() {
   // do something interesting
+})
+```
+
+#### 6. `idHandDidNotProgram`
+
+Example:
+
+```
+reader.on('idHandDidNotProgram', function(reason) {
+  // returns back with the reason why the idHand was unable to program an RFID Tag.
+})
+```
+
+#### 7. `idHandDidProgram`
+
+Example: 
+
+```
+reader.on('idHandDidProgram', function() {
+  // called when ID Hand is able to successfully write data to the tag
+})
+```
+
+#### 8. `idHandDidStartProgramming`
+
+Example: 
+
+```
+reader.on('idHandDidStartProgramming', function() {
+  // called when ID hand begins tag writing.
+})
+```
+
+#### 9. `idHandDidStopProgramming`
+
+Example: 
+
+```
+reader.on('idHandDidStartProgramming', function() {
+  // called when ID hand finishes tag writing
 })
 ```

@@ -4,8 +4,10 @@ class NedapReader {
     this.manufacturer       = idHand.manufacturer
     this.serial             = idHand.serial
     this.name               = idHand.name
+
     this.observingTags      = false
     this.observingBarcodes  = false
+    this.programmingSessionActive = false
 
     this.observedEpcs       = null
     this.observedBarcodes   = [] 
@@ -18,7 +20,11 @@ class NedapReader {
       'barcodeIdHandDidStopReading':  [],
       'barcodeIdHandDidRead':         [],
       'barcodeIdHandReadFailed':      [],
-      'onDisconnect':                 []
+      'onDisconnect':                 [],
+      'idHandDidNotProgram':          [],
+      'idHandDidProgram':             [],
+      'idHandDidStartProgramming':    [],
+      'idHandDidStopProgramming':     []
     }
   }
 
@@ -73,6 +79,7 @@ class NedapReader {
   }
 
   startObservingBarcodes() {
+    this.observedEpcs = null
     this.observingBarcodes = true
     console.info("NedapReader: Ready to observe barcodes. Press the button on the !D Hand to start.")
     return new Promise((resolve, reject) => {
@@ -87,6 +94,7 @@ class NedapReader {
   }
 
   stopObservingBarcodes() {
+    this.observedBarcodes  = []
     this.observingBarcodes = false
     return new Promise((resolve, reject) => {
       cordova.exec((success) => {
@@ -99,6 +107,35 @@ class NedapReader {
     })
   }
 
+  startProgrammingSession() {
+    console.info("NedapReader: Tag Programming session opened. Make sure you call `reader.writeToTag(value)` and then press the button on the !D Hand.")
+    this.programmingSessionActive = true
+    cordova.exec((success) => {
+      this.emit(success.eventName, success.payload)
+    }, () => {
+      //
+    }, "NedapReader", "startProgrammingSession", [])
+  }
+
+  stopProgrammingSession() {
+    console.info("NedapReader: Tag programming session closed.")
+    this.programmingSessionActive = false
+    cordova.exec(() => {
+
+    }, () => {
+      //
+    }, "NedapReader", "stopProgrammingSession", [])
+  }
+
+  writeToTag(value) {
+    console.info("Writetotag called")
+    cordova.exec((success) => {
+      this.emit(success.eventName, success.payload)
+    }, (error) => {
+      //
+    }, "NedapReader", "writeToTag", [value]) 
+  }
+
   static connect() {
     console.info('NedapReader: Initiating connection with !D Hand')
     return new Promise((resolve, reject) => {
@@ -109,6 +146,9 @@ class NedapReader {
         reader.on('onTagRead', (result) => {
           reader.observedEpcs = result
           console.info("NedapReader: ", result)
+          console.groupCollapsed("Observed EPC's (table format)")
+          console.table(result.epcs)
+          console.groupEnd()
         })
 
         reader.on('idHandDidStartReading', () => {
@@ -130,6 +170,26 @@ class NedapReader {
         reader.on('barcodeIdHandDidRead', (result) => {
           reader.observedBarcodes.push(result)
           console.info("NedapReader: barcodeIdHandDidRead", result)
+        })
+
+        reader.on('barcodeIdHandReadFailed', () => {
+          console.error("NedapReader: barcodeIdHandReadFailed")
+        })
+
+        reader.on('idHandDidNotProgram', (reason) => {
+          console.error("NedapReader: idHandDidNotProgram", reason)
+        })
+
+        reader.on('idHandDidStartProgramming', () => {
+          console.info("NedapReader: idHandDidStartProgramming")
+        })
+
+        reader.on('idHandDidStopProgramming', () => {
+          console.info("NedapReader: idHandDidStopProgramming")
+        })
+
+        reader.on('idHandDidProgram', () => {
+          console.info("NedapReader: idHandDidProgram")
         })
 
         console.info('NedapReader: Initiating NedapReader object..')

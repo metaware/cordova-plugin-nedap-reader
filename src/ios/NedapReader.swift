@@ -5,7 +5,8 @@ import NedapIdReader
 @objc(NedapReader) class NedapReader : CDVPlugin,
   IdHandConnectorObserver,
   InventorySessionDelegate,
-  BarcodeSessionDelegate
+  BarcodeSessionDelegate,
+  ProgramSessionDelegate
   {
   
   //  var idHandConnector: IdHandConnector
@@ -15,10 +16,12 @@ import NedapIdReader
   
   var inventorySession:           InventorySession?
   var barcodeSession:             BarcodeSession?
+  var programmingSession:         ProgramSession?
   
   var callbackId:                 String!
   var inventorySessionCallbackId: String!
   var barcodeSessionCallbackId:   String!
+  var programSessionCallbackId:   String!
   
   var connectedIdHand:            IdHand!
   var observationTimer:           NSTimer?
@@ -239,5 +242,85 @@ import NedapIdReader
   func barcodeDidEncounterError(error : NSError) {
     print("barcodeDidEncounterError")
   }
+  
+  
+  // MARK: PROGRAM SESSION *****************
+  
+  func startProgrammingSession(command: CDVInvokedUrlCommand) -> Void {
+    print("startProgrammingSession")
+    programSessionCallbackId = command.callbackId
+    programmingSession = ProgramSession(idHandConnector: idHandConnector!, idHandSettings: idHandSettings!)
+    programmingSession?.delegate = self
+    programmingSession?.start()
+  }
+  
+  func stopProgrammingSession(command: CDVInvokedUrlCommand) -> Void {
+    print("stopProgrammingSession")
+    programmingSession?.delegate = nil
+    programmingSession?.stop()
+    programmingSession?.cleanup()
+  }
+  
+  func writeToTag(command: CDVInvokedUrlCommand) -> Void {
+    let hexValue = command.arguments.first as! String
+    programmingSession?.programHex(hexValue)
+    programSessionCallbackId = command.callbackId;
+  }
+  
+  // MARK: ProgramSessionDelegate
+  
+  func programIdHandDidStartProgramming() {
+    let response = ["eventName": "idHandDidStartProgramming", "payload": true]
+    let pluginResult = CDVPluginResult.init(status: CDVCommandStatus_OK, messageAsDictionary: response)
+    pluginResult.setKeepCallbackAsBool(true)
+    commandDelegate?.sendPluginResult(pluginResult, callbackId: programSessionCallbackId)
+  }
+  
+  
+  func programIdHandDidStopProgramming() {
+    let response = ["eventName": "idHandDidStopProgramming", "payload": true]
+    let pluginResult = CDVPluginResult.init(status: CDVCommandStatus_OK, messageAsDictionary: response)
+    pluginResult.setKeepCallbackAsBool(true)
+    commandDelegate?.sendPluginResult(pluginResult, callbackId: programSessionCallbackId)
+  }
+  
+  
+  func programIdHandDidProgram() {
+    let response = ["eventName": "idHandDidProgram", "payload": true]
+    let pluginResult = CDVPluginResult.init(status: CDVCommandStatus_OK, messageAsDictionary: response)
+    pluginResult.setKeepCallbackAsBool(true)
+    commandDelegate?.sendPluginResult(pluginResult, callbackId: programSessionCallbackId)
+  }
+  
+  
+  func programIdHandDidNotProgram(errorMessage: String) {
+    print("didNotProgram")
+    print(errorMessage)
+    let response = ["eventName": "idHandDidNotProgram", "payload": errorMessage]
+    let pluginResult = CDVPluginResult.init(status: CDVCommandStatus_OK, messageAsDictionary: response)
+    pluginResult.setKeepCallbackAsBool(true)
+    commandDelegate?.sendPluginResult(pluginResult, callbackId: programSessionCallbackId)
+  }
+  
+  
+  func programIdHandIsSelected() {
+
+  }
+  
+  
+  func programIdHandIsDeselected() {
+
+  }
+  
+  
+  func programIdHandBatteryWarning(idHand : IdHand, batteryPercentage : Int) {
+
+  }
+  
+  
+  func programDidEncounterError(error : NSError) {
+    print("didEncounterError")
+  }
+
 
 }

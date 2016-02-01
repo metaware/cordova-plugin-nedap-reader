@@ -11,8 +11,10 @@ var NedapReader = (function () {
     this.manufacturer = idHand.manufacturer;
     this.serial = idHand.serial;
     this.name = idHand.name;
+
     this.observingTags = false;
     this.observingBarcodes = false;
+    this.programmingSessionActive = false;
 
     this.observedEpcs = null;
     this.observedBarcodes = [];
@@ -25,7 +27,11 @@ var NedapReader = (function () {
       'barcodeIdHandDidStopReading': [],
       'barcodeIdHandDidRead': [],
       'barcodeIdHandReadFailed': [],
-      'onDisconnect': []
+      'onDisconnect': [],
+      'idHandDidNotProgram': [],
+      'idHandDidProgram': [],
+      'idHandDidStartProgramming': [],
+      'idHandDidStopProgramming': []
     };
   }
 
@@ -90,6 +96,7 @@ var NedapReader = (function () {
     value: function startObservingBarcodes() {
       var _this2 = this;
 
+      this.observedEpcs = null;
       this.observingBarcodes = true;
       console.info('NedapReader: Ready to observe barcodes. Press the button on the !D Hand to start.');
       return new Promise(function (resolve, reject) {
@@ -105,6 +112,7 @@ var NedapReader = (function () {
   }, {
     key: 'stopObservingBarcodes',
     value: function stopObservingBarcodes() {
+      this.observedBarcodes = [];
       this.observingBarcodes = false;
       return new Promise(function (resolve, reject) {
         cordova.exec(function (success) {
@@ -115,6 +123,34 @@ var NedapReader = (function () {
           reject(error);
         }, 'NedapReader', 'stopObservingBarcodes', []);
       });
+    }
+  }, {
+    key: 'startProgrammingSession',
+    value: function startProgrammingSession() {
+      var _this3 = this;
+
+      console.info('NedapReader: Tag Programming session opened. Make sure you call `reader.writeToTag(value)` and then press the button on the !D Hand.');
+      this.programmingSessionActive = true;
+      cordova.exec(function (success) {
+        _this3.emit(success.eventName, success.payload);
+      }, function () {}, 'NedapReader', 'startProgrammingSession', []);
+    }
+  }, {
+    key: 'stopProgrammingSession',
+    value: function stopProgrammingSession() {
+      console.info('NedapReader: Tag programming session closed.');
+      this.programmingSessionActive = false;
+      cordova.exec(function () {}, function () {}, 'NedapReader', 'stopProgrammingSession', []);
+    }
+  }, {
+    key: 'writeToTag',
+    value: function writeToTag(value) {
+      var _this4 = this;
+
+      console.info('Writetotag called');
+      cordova.exec(function (success) {
+        _this4.emit(success.eventName, success.payload);
+      }, function (error) {}, 'NedapReader', 'writeToTag', [value]);
     }
   }, {
     key: 'disconnect',
@@ -141,6 +177,9 @@ var NedapReader = (function () {
           reader.on('onTagRead', function (result) {
             reader.observedEpcs = result;
             console.info('NedapReader: ', result);
+            console.groupCollapsed('Observed EPC\'s (table format)');
+            console.table(result.epcs);
+            console.groupEnd();
           });
 
           reader.on('idHandDidStartReading', function () {
@@ -164,6 +203,26 @@ var NedapReader = (function () {
             console.info('NedapReader: barcodeIdHandDidRead', result);
           });
 
+          reader.on('barcodeIdHandReadFailed', function () {
+            console.error('NedapReader: barcodeIdHandReadFailed');
+          });
+
+          reader.on('idHandDidNotProgram', function (reason) {
+            console.error('NedapReader: idHandDidNotProgram', reason);
+          });
+
+          reader.on('idHandDidStartProgramming', function () {
+            console.info('NedapReader: idHandDidStartProgramming');
+          });
+
+          reader.on('idHandDidStopProgramming', function () {
+            console.info('NedapReader: idHandDidStopProgramming');
+          });
+
+          reader.on('idHandDidProgram', function () {
+            console.info('NedapReader: idHandDidProgram');
+          });
+
           console.info('NedapReader: Initiating NedapReader object..');
           resolve(reader);
         }, function (error) {
@@ -179,3 +238,9 @@ var NedapReader = (function () {
 module.exports = {
   connect: NedapReader.connect
 };
+
+//
+
+//
+
+//
