@@ -61,6 +61,54 @@ Add callbacks on interesting events. Check the supported events section for name
 
 ---
 
+
+#### 7. `reader.observingEpcs` (Boolean)
+
+Returns `true` if the RFID observation session is active and the !D Hand is observing RFID Tags, returns `false` otherwise.
+
+---
+
+#### 8. `reader.observingBarcodes` (Boolean)
+
+Returns `true` if the Barcode observation session is active and the !D Hand is observing Barcodes, returns `false` otherwise.
+
+---
+
+#### 9. `reader.observedEpcs` (Object)
+
+Object containing observed EPCs data, following properties are available:
+
+```
+{
+  total_count: N,
+  unique_count: N,
+  epcs: [{
+    hex: "hex value",
+    rssi: -N,
+    times_observed: N
+  }]
+}
+```
+---
+
+#### 10. `reader.serial` (String)
+
+Returns the serial number of the connected !D Hand.
+
+---
+
+#### 10. `reader.manufacturer` (String)
+
+Returns the Manufacturer name of the connected !D Hand.
+
+---
+
+#### 11. `reader.name` (String)
+
+Returns the Name of the connected !D Hand.
+
+---
+
 ### Supported Events:
 
 #### 1. `idHandDidStartReading`
