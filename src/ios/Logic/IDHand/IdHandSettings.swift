@@ -5,6 +5,11 @@
 //  Copyright © 2015 N.V. Nederlandsche Apparatenfabriek "NEDAP". All rights reserved.
 //
 
+//IdHandRFIDSelect = Any;
+//IdHandRFIDSessionType = "Session 1";
+//IdHandRFIDTarget = "Target A";
+//IdHandRegulation = 0;
+
 import Foundation
 import UIKit
 import NedapIdReader
@@ -74,7 +79,7 @@ class IdHandSettings {
 
 
     /// Output power, default 0
-    var outputPower : Int? {
+    var outputPower : Int? = 260 {
         didSet {
             settingsUpdated()
         }
@@ -82,7 +87,7 @@ class IdHandSettings {
 
 
     /// Regulation where this !D Hand operates in
-    var regulation : IDRRegulationWrapper? {
+    var regulation : IDRRegulationWrapper? = IDRRegulationWrapper.init(value: .ETSI) {
         didSet {
             settingsUpdated()
         }
@@ -95,7 +100,7 @@ class IdHandSettings {
             // Get reference to the App Delegate
             // let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
             // return appDelegate.idHandConnector.selectedIdHand?.outputPowerBoundaries?.max ?? IdHandMaximumOutputPower
-            return IdHandMaximumOutputPower;
+          return 260; //IdHandMaximumOutputPower;
         }
     }
 
