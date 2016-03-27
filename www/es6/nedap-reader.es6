@@ -24,7 +24,8 @@ class NedapReader {
       'idHandDidNotProgram':          [],
       'idHandDidProgram':             [],
       'idHandDidStartProgramming':    [],
-      'idHandDidStopProgramming':     []
+      'idHandDidStopProgramming':     [],
+      'idHandBatteryLevelUpdate':     []
     }
   }
 
@@ -190,6 +191,10 @@ class NedapReader {
 
         reader.on('idHandDidProgram', () => {
           console.info("NedapReader: idHandDidProgram")
+        })
+
+        reader.on('idHandBatteryLevelUpdate', (percentage) => {
+          console.info("NedapReader: idHandBatteryLevelUpdate", percentage)
         })
 
         console.info('NedapReader: Initiating NedapReader object..')

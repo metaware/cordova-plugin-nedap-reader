@@ -133,7 +133,13 @@ import NedapIdReader
   }
   
   func idHandBatteryLevelUpdate(idHand : IdHand, batteryPercentage : Int) {
-    print("idHandBatteryLevelUpdate")
+    let payload  = [
+      "battery_percentage":  batteryPercentage
+    ]
+    let response = ["eventName": "idHandBatteryLevelUpdate", "payload": payload]
+    let pluginResult = CDVPluginResult.init(status: CDVCommandStatus_OK, messageAsDictionary: response as [NSObject : AnyObject] )
+    pluginResult.setKeepCallbackAsBool(true)
+    self.commandDelegate?.sendPluginResult(pluginResult, callbackId: self.inventorySessionCallbackId)
   }
   
   func idHandBatteryWarning(idHand : IdHand, batteryPercentage : Int) {

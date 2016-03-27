@@ -31,7 +31,8 @@ var NedapReader = (function () {
       'idHandDidNotProgram': [],
       'idHandDidProgram': [],
       'idHandDidStartProgramming': [],
-      'idHandDidStopProgramming': []
+      'idHandDidStopProgramming': [],
+      'idHandBatteryLevelUpdate': []
     };
   }
 
@@ -221,6 +222,10 @@ var NedapReader = (function () {
 
           reader.on('idHandDidProgram', function () {
             console.info('NedapReader: idHandDidProgram');
+          });
+
+          reader.on('idHandBatteryLevelUpdate', function (percentage) {
+            console.info('NedapReader: idHandBatteryLevelUpdate', percentage);
           });
 
           console.info('NedapReader: Initiating NedapReader object..');
