@@ -239,3 +239,13 @@ reader.on('idHandDidStartProgramming', function() {
   // called when ID hand finishes tag writing
 })
 ```
+
+#### 9. `idHandBatteryLevelUpdate`
+
+Example: 
+
+```
+reader.on('idHandBatteryLevelUpdate', function(percentage) {
+  // called when ID hand finishes tag writing
+})
+```
