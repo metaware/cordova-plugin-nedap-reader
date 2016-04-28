@@ -87,7 +87,7 @@ class IdHandSettings {
 
 
     /// Regulation where this !D Hand operates in
-    var regulation : IDRRegulationWrapper? = IDRRegulationWrapper.init(value: .ETSI) {
+    var regulation : IDRRegulationWrapper? = IDRRegulationWrapper.init(value: .FCC_IC) {
         didSet {
             settingsUpdated()
         }
