@@ -133,6 +133,10 @@ Returns the Manufacturer name of the connected !D Hand.
 
 Returns the Name of the connected !D Hand.
 
+#### 16. `reader.outputPower` (Integer)
+
+Returns the current output power of the !D Hand. Setting this to a new value attempts an update for the output power.
+
 ---
 
 ### Supported Events:
