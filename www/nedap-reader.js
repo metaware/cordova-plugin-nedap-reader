@@ -11,6 +11,7 @@ var NedapReader = (function () {
     this.manufacturer = idHand.manufacturer;
     this.serial = idHand.serial;
     this.name = idHand.name;
+    this.outputPower = null;
 
     this.observingTags = false;
     this.observingBarcodes = false;
@@ -165,6 +166,17 @@ var NedapReader = (function () {
           reject(error);
         }, 'NedapReader', 'disconnect', []);
       });
+    }
+  }, {
+    key: 'outputPower',
+    set: function (newOutputPower) {
+      if (newOutputPower) {
+        cordova.exec(function (success) {
+          console.info('NedapReader: Updated output power to', newOutputPower);
+        }, function (error) {
+          console.info('NedapReader: Failed to update output power');
+        }, 'NedapReader', 'setOutputPower', [newOutputPower]);
+      }
     }
   }], [{
     key: 'connect',

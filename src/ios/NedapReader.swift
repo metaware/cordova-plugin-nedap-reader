@@ -47,6 +47,10 @@ import NedapIdReader
   func connect(command: CDVInvokedUrlCommand) -> Void {
     self.callbackId = command.callbackId
     idHandSettings = IdHandSettings()
+    
+    let regulation = IDRRegulationWrapper.init(value: .FCC_IC)
+    idHandSettings?.regulation = regulation
+    
     configureSettings(command.arguments.first!)
     idHandConnector = IdHandConnector(idHandSettings: idHandSettings!)
     idHandConnector!.addObserver(self)
@@ -59,6 +63,14 @@ import NedapIdReader
     self.connectedIdHand.disconnect()
     let pluginResult = CDVPluginResult.init(status: CDVCommandStatus_OK, messageAsString: "Disconnected")
     self.commandDelegate?.sendPluginResult(pluginResult, callbackId: command.callbackId)
+  }
+  
+  func setOutputPower(command: CDVInvokedUrlCommand) -> Void {
+    if let outputPower = command.arguments.first {
+      idHandSettings?.outputPower = outputPower.integerValue
+      let pluginResult = CDVPluginResult.init(status: CDVCommandStatus_OK, messageAsString: "Updated")
+      self.commandDelegate.sendPluginResult(pluginResult, callbackId: command.callbackId)
+    }
   }
   
   // MARK: RFID SESSION ********************

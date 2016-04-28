@@ -4,6 +4,7 @@ class NedapReader {
     this.manufacturer       = idHand.manufacturer
     this.serial             = idHand.serial
     this.name               = idHand.name
+    this.outputPower        = null
 
     this.observingTags      = false
     this.observingBarcodes  = false
@@ -26,6 +27,16 @@ class NedapReader {
       'idHandDidStartProgramming':    [],
       'idHandDidStopProgramming':     [],
       'idHandBatteryLevelUpdate':     []
+    }
+  }
+  
+  set outputPower(newOutputPower) {
+    if (newOutputPower) {
+      cordova.exec((success) => {
+        console.info('NedapReader: Updated output power to', newOutputPower)
+      }, (error) => {
+        console.info('NedapReader: Failed to update output power')
+      }, "NedapReader", "setOutputPower", [newOutputPower])
     }
   }
 
