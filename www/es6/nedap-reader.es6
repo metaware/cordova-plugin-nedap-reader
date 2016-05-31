@@ -5,6 +5,7 @@ class NedapReader {
     this.serial             = idHand.serial
     this.name               = idHand.name
     this.outputPower        = null
+    this.session            = null
 
     this.observingTags      = false
     this.observingBarcodes  = false
@@ -37,6 +38,22 @@ class NedapReader {
       }, (error) => {
         console.info('NedapReader: Failed to update output power')
       }, "NedapReader", "setOutputPower", [newOutputPower])
+    }
+  }
+  
+  set session(newSession) {
+    // possible values include: "Session0", "Session1", "Session2", "Session3"
+    var validValues = ["Session0", "Session1", "Session2", "Session3"]
+    if (validValues.indexOf(newSession) == -1) {
+      console.error('Invalid value for session. Valid values are: "Session0", "Session1", "Session2", "Session3"')
+      return
+    }
+    if (newSession) {
+      cordova.exec((success) => {
+        console.info('NedapReader: Updated session to', newSession)
+      }, (error) => {
+        console.info('NedapReader: Failed to update session')
+      }, "NedapReader", "setSession", [newSession])
     }
   }
 

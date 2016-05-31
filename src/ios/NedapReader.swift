@@ -28,19 +28,24 @@ import NedapIdReader
   
   var disableFeedback:            Bool!
   
-  func configureSettings(object: AnyObject) -> Void {
-    switch object["session"] as! String  {
+  func getNativeSessionValue(session: String) -> IdHandRFIDSessionType {
+    switch session  {
       case "Session0":
-        idHandSettings?.session = IdHandRFIDSessionType.Session0
+        return IdHandRFIDSessionType.Session0
       case "Session1":
-        idHandSettings?.session = IdHandRFIDSessionType.Session1
+        return IdHandRFIDSessionType.Session1
       case "Session2":
-        idHandSettings?.session = IdHandRFIDSessionType.Session2
+        return IdHandRFIDSessionType.Session2
       case "Session3":
-        idHandSettings?.session = IdHandRFIDSessionType.Session3
+        return IdHandRFIDSessionType.Session3
       default:
-        idHandSettings?.session = IdHandRFIDSessionType.Session1
+        return IdHandRFIDSessionType.Session1
     }
+  }
+  
+  func configureSettings(object: AnyObject) -> Void {
+    let selectedSession = getNativeSessionValue(object["session"] as! String)
+    idHandSettings?.session = selectedSession
     self.disableFeedback = object["disableFeedback"] as! Bool
   }
   
@@ -68,6 +73,15 @@ import NedapIdReader
   func setOutputPower(command: CDVInvokedUrlCommand) -> Void {
     if let outputPower = command.arguments.first {
       idHandSettings?.outputPower = outputPower.integerValue
+      let pluginResult = CDVPluginResult.init(status: CDVCommandStatus_OK, messageAsString: "Updated")
+      self.commandDelegate.sendPluginResult(pluginResult, callbackId: command.callbackId)
+    }
+  }
+  
+  func setSession(command: CDVInvokedUrlCommand) -> Void {
+    if let session = command.arguments.first {
+      let selectedSession = getNativeSessionValue(session as! String)
+      idHandSettings?.session = selectedSession
       let pluginResult = CDVPluginResult.init(status: CDVCommandStatus_OK, messageAsString: "Updated")
       self.commandDelegate.sendPluginResult(pluginResult, callbackId: command.callbackId)
     }

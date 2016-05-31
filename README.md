@@ -137,6 +137,10 @@ Returns the Name of the connected !D Hand.
 
 Returns the current output power of the !D Hand. Setting this to a new value attempts an update for the output power.
 
+#### 17. `reader.session` (String)
+
+Returns the current session of the !D Hand. Setting this to a new value attempts to update the session being used.
+
 ---
 
 ### Supported Events:

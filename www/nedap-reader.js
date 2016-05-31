@@ -12,6 +12,7 @@ var NedapReader = (function () {
     this.serial = idHand.serial;
     this.name = idHand.name;
     this.outputPower = null;
+    this.session = null;
 
     this.observingTags = false;
     this.observingBarcodes = false;
@@ -176,6 +177,23 @@ var NedapReader = (function () {
         }, function (error) {
           console.info('NedapReader: Failed to update output power');
         }, 'NedapReader', 'setOutputPower', [newOutputPower]);
+      }
+    }
+  }, {
+    key: 'session',
+    set: function (newSession) {
+      // possible values include: "Session0", "Session1", "Session2", "Session3"
+      var validValues = ['Session0', 'Session1', 'Session2', 'Session3'];
+      if (validValues.indexOf(newSession) == -1) {
+        console.error('Invalid value for session. Valid values are: "Session0", "Session1", "Session2", "Session3"');
+        return;
+      }
+      if (newSession) {
+        cordova.exec(function (success) {
+          console.info('NedapReader: Updated session to', newSession);
+        }, function (error) {
+          console.info('NedapReader: Failed to update session');
+        }, 'NedapReader', 'setSession', [newSession]);
       }
     }
   }], [{
